@@ -31,7 +31,8 @@ function Login() {
         navigate("/")
     }
     return (
-        <div>
+        <div className='loginContent'>
+            <div>
             <Menu title={t("login")}/>
             <div className='form'>
                 <form className='formStyle' onSubmit={handleSubmit}>
@@ -55,6 +56,7 @@ function Login() {
                         <button className='submitButton' type="submit">{t("login")}</button>
                     </div>
                 </form>
+            </div>
             </div>
             <Footer/>
         </div>

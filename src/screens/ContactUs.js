@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 import Footer from '../component/Footer'
 import Menu from '../component/Menu'
+import "../style/ContactUs.css"
 function ContactUs() {
     const userInfo = JSON.parse(localStorage.getItem("auth"))
     const [name, setName] = useState(userInfo.name);
@@ -43,7 +44,8 @@ function ContactUs() {
         })
     }
     return (
-        <div>
+        <div className='contactContent'>
+            <div>
             <Menu title={t("contact")} />
             <div className='form'>
                 <form className='formStyle' onSubmit={handleSubmit}>
@@ -82,6 +84,7 @@ function ContactUs() {
                         <button className='submitButton' type="submit">{t("send")}</button>
                     </div>
                 </form>
+            </div>
             </div>
             <Footer />
         </div>

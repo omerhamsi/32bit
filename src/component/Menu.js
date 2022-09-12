@@ -16,6 +16,70 @@ function Menu({ title = "Dummy" }) {
   const [control, setControl] = useState(false);
   const { t } = useTranslation();
   const [openDropDown, setopenDropDown] = useState(false);
+
+  const OpenMenu = () => {
+    return (
+      <div className='openMenu'>
+        <ul>
+          <li className='layoutList'>
+            <Link to={"/login"}>{t("login")}</Link>
+          </li>
+          <li className='layoutList' style={{ display: localStorage.getItem("auth") && (title !== "Contact Us" && title !== "Bize Ulaşın") ? "flex" : "none" }}>
+            <Link to={"/contactUs"}>{t("contact")}</Link>
+          </li>
+          <li className='layoutList'>
+            <Link to={"/"}>{t("home")}</Link>
+          </li>
+          <li className='layoutList'>
+            <div style={{ marginRight: "10px", width: "120px" }} >
+              <FormControl fullWidth>
+                <InputLabel style={{ color: "white", marginTop: "10px" }} id="demo-simple-select-label">{t('lng')}</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  style={{ color: "white" }}
+                  onChange={(e) => {
+                    if (localStorage.getItem("lng")) {
+                      localStorage.removeItem("lng")
+                    }
+                    localStorage.setItem("lng", e.target.value)
+                    i18n.changeLanguage(e.target.value)
+                  }}
+                >
+                  <MenuItem value="tr">{t('turkish')}</MenuItem>
+                  <MenuItem value="en">{t("english")}</MenuItem>
+                </Select>
+              </FormControl>
+            </div>
+          </li>
+          {localStorage.getItem("auth") ?
+            <>
+              <li className='layoutList'>
+                <p style={{ color: "white" }}>{JSON.parse(localStorage.getItem("auth")).name}</p>
+              </li>
+              <li className='layoutList'>
+                <p style={{ color: "white" }}>{JSON.parse(localStorage.getItem("auth")).email}</p>
+              </li>
+              <li className='layoutList'>
+                <Link onClick={() => localStorage.removeItem("auth")} to={"/"}>{t("logOut")}</Link>
+              </li>
+            </>
+            : null}
+        </ul>
+      </div>
+    )
+  }
+  const UserInfo = () => {
+    return (
+      <div class="dropdown-content">
+        <a href="#">{JSON.parse(localStorage.getItem("auth")).email}</a>
+        <a onClick={() => {
+          localStorage.removeItem("auth")
+          navigate("/")
+        }} href="#">{t("logOut")}</a>
+      </div>
+    )
+  }
   return (
     <Suspense fallback="Loading...">
       <div className='menuContainer'>
@@ -58,66 +122,13 @@ function Menu({ title = "Dummy" }) {
                 <p style={{ marginTop: "10px" }}>{JSON.parse(localStorage.getItem("auth")).name}</p>
                 <img style={{ width: "20px", height: "20px", marginLeft: "5px" }} src={Down} alt="" />
               </div>
-              <div style={{ display: openDropDown ? "flex" : "none" }} class="dropdown-content">
-                <a href="#">{JSON.parse(localStorage.getItem("auth")).email}</a>
-                <a onClick={() => {
-                  localStorage.removeItem("auth")
-                  navigate("/")
-                }} href="#">{t("logOut")}</a>
-              </div>
+              {openDropDown? <UserInfo/>:null}
             </div>
             : null}
         </div>
         <div className='hamburgerIcon'>
           <img onClick={() => setControl(!control)} src={Hamburger} alt="" />
-          <div style={{ display: control ? "block" : "none" }} className='openMenu'>
-            <ul>
-              <li className='layoutList'>
-                <Link to={"/login"}>{t("login")}</Link>
-              </li>
-              <li className='layoutList' style={{ display: localStorage.getItem("auth") && (title !== "Contact Us" && title !== "Bize Ulaşın") ? "flex" : "none" }}>
-                <Link to={"/contactUs"}>{t("contact")}</Link>
-              </li>
-              <li className='layoutList'>
-                <Link to={"/"}>{t("home")}</Link>
-              </li>
-              <li className='layoutList'>
-                <div style={{ marginRight: "10px", width: "120px" }} >
-                  <FormControl fullWidth>
-                    <InputLabel style={{ color: "white", marginTop: "10px" }} id="demo-simple-select-label">{t('lng')}</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      style={{ color: "white" }}
-                      onChange={(e) => {
-                        if (localStorage.getItem("lng")) {
-                          localStorage.removeItem("lng")
-                        }
-                        localStorage.setItem("lng", e.target.value)
-                        i18n.changeLanguage(e.target.value)
-                      }}
-                    >
-                      <MenuItem value="tr">{t('turkish')}</MenuItem>
-                      <MenuItem value="en">{t("english")}</MenuItem>
-                    </Select>
-                  </FormControl>
-                </div>
-              </li>
-              {localStorage.getItem("auth") ?
-                <>
-                  <li className='layoutList'>
-                    <p style={{ color: "white" }}>{JSON.parse(localStorage.getItem("auth")).name}</p>
-                  </li>
-                  <li className='layoutList'>
-                    <p style={{ color: "white" }}>{JSON.parse(localStorage.getItem("auth")).email}</p>
-                  </li>
-                  <li className='layoutList'>
-                    <Link onClick={()=>localStorage.removeItem("auth")} to={"/"}>{t("logOut")}</Link>
-                  </li>
-                </>
-                : null}
-            </ul>
-          </div>
+          {control ? <OpenMenu /> : null}
         </div>
       </div>
     </Suspense>
