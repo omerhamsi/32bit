@@ -1,24 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
-
+import Menu from "./component/Menu.js";
+import "./style/App.css"
+import Footer from "./component/Footer.js";
+import { useTranslation } from "react-i18next";
+import { Suspense, useEffect } from "react";
+import i18n from "i18next"
+import { initReactI18next } from 'react-i18next';
 function App() {
+  const {t}=useTranslation()
+  useEffect(()=>{
+    localStorage.setItem("lng","en")
+  })
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Suspense fallback="loading">
+        <div className="App">
+        <Menu/>
+        <div className="title">
+          <h1 style={{ fontSize: "70px" }}>{t("sample")}</h1>
+          <p>{t("welcome")}</p>
+        </div>
+        <Footer />
+      </div>
+      </Suspense>
   );
 }
 
