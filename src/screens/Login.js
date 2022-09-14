@@ -1,65 +1,98 @@
 import React, { useEffect, useState } from 'react'
 import "../style/Login.css"
-import Menu from '../component/Menu'
-import Footer from '../component/Footer'
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'; import { Box, Button, Typography } from '@mui/material';
+import { Formik } from 'formik';
+import * as Yup from "yup"
+import { TextField } from '@mui/material';
+import Stack from '@mui/material/Stack';
 
-function Login() {
-    const navigate=useNavigate();
-    const [name,setName]=useState("");
-    const [email,setEmail]=useState("");
-    const [password,setPassword]=useState("")
-    const {t}=useTranslation()
+function Login({ setOpen = null }) {
+    const navigate = useNavigate();
+    const { t } = useTranslation();
 
-    useEffect(()=>{
-        if(localStorage.getItem("auth")){
+    useEffect(() => {
+        if (localStorage.getItem("auth")) {
             navigate("/")
         }
     })
-    const handleSubmit=(e)=>{
-        e.preventDefault();
-        console.log(name);
-        console.log(email);
-        console.log(password)
-        let object={
-            "name":name,
-            "email":email,
-            "password":password
-        }
-        localStorage.setItem("auth",JSON.stringify(object));
-        navigate("/")
-    }
     return (
-        <div className='loginContent'>
-            <div>
-            <Menu title={t("login")}/>
-            <div className='form'>
-                <form className='formStyle' onSubmit={handleSubmit}>
-                <div class="form-group">
-                        <label for="exampleInputEmail1">{t("name")}</label>
-                        <span style={{ color: "red", marginLeft: "3px" }} className='form-required'>*</span>
-                        <input title="Please fill in the marked fields" value={name} onChange={(e)=>setName(e.target.value)} required type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder={t("enterName")} />
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputEmail1">{t("email")}</label>
-                        <span style={{ color: "red", marginLeft: "3px" }} className='form-required'>*</span>
-                        <input title="Please fill in the marked fields" required value={email} onChange={(e)=> setEmail(e.target.value)} type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder={t("enterEmail")} />
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleInputPassword1">{t("password")}</label>
-                        <span style={{ color: "red", marginLeft: "3px" }} className='form-required'>*</span>
-                        <input title='Please fill in the marked fields' value={password} onChange={(e)=>setPassword(e.target.value)} required type="password" class="form-control" id="exampleInputPassword1" placeholder={t("enterPassword")} />
+        <Box>
+            <Box>
+                <Box className='form'>
+                    <Formik
+                        initialValues={{ name: '', email: '', password: '' }}
 
-                    </div>
-                    <div className='buttonLayout'>
-                        <button className='submitButton' type="submit">{t("login")}</button>
-                    </div>
-                </form>
-            </div>
-            </div>
-            <Footer/>
-        </div>
+                        onSubmit={(values, { setSubmitting }) => {
+                            console.log(values)
+                            localStorage.setItem("auth", JSON.stringify(values));
+                            navigate("/")
+                            setOpen(false)
+                        }}
+                        validationSchema={
+                            Yup.object({
+                                name: Yup.string().required(`${t("nameWarning")}`),
+                                email: Yup.string().email("Geçerli bir email adresi giriniz").required(`${t("emailWarning")}`),
+                                password: Yup.string().required(`${t("passwordWarning")}`),
+                            })
+                        }
+                    >
+                        {({
+                            values,
+                            errors,
+                            handleChange,
+                            handleSubmit,
+                        }) => (
+                            <Box
+                                component="form"
+                                sx={{
+                                    '& .MuiTextField-root': { m: 1, width: '50ch' },
+                                }}
+                                noValidate
+                                autoComplete="off"
+                                onSubmit={handleSubmit}
+                            >
+                               <Stack spacing={2}>
+                               <TextField
+                                    helperText={t("enterName")}
+                                    name="name"
+                                    value={values.name}
+                                    label={t("name")}
+                                    onChange={handleChange}
+                                    type="name"
+                                    
+                                />
+                                {errors.name && <Typography>{errors.name}</Typography>}
+                                <TextField
+                                    helperText={t("enterEmail")}
+                                    name="email"
+                                    value={values.email}
+                                    label={t("email")}
+                                    onChange={handleChange}
+                                    type="email"  
+                                />
+                                {errors.email && <Typography>{errors.email}</Typography>}
+                                <TextField
+                                    helperText={t("enterPassword")}
+                                    name="password"
+                                    value={values.password}
+                                    label={t("password")}
+                                    onChange={handleChange}
+                                    type="password"
+                                    
+                                />
+                                {errors.password && <Typography>{errors.password}</Typography>}
+                               </Stack>
+
+                                <Box className='buttonLayout'>
+                                    <Button variant='contained' className='submitButton' type="submit">{t("login")}</Button>
+                                </Box>
+                            </Box>
+                        )}
+                    </Formik>
+                </Box>
+            </Box>
+        </Box>
 
     )
 }

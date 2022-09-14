@@ -25,7 +25,11 @@ const translationsEn = {welcome:"Welcome Home Page",turkish:"Turkish",english:"E
   enterPhoneNumber:"Enter your phone number",
   selectCountry:"Select Country",
   textarea:"Message",
-  send:"Send"
+  send:"Send",
+  nameWarning:"Name cannot be left empty",
+  emailWarning:"Email cannot be left empty",
+  passwordWarning:"Password cannot be left empty",
+  helperSelectCountry:"choose a country",
 }
 const translationsTr = {
   name:"İsim",
@@ -41,6 +45,10 @@ const translationsTr = {
   selectCountry:"Ülke Seçimi",
   textarea:"Mesaj",
   send:"Gönder",
+  nameWarning:"İsim boş bırakılamaz",
+  emailWarning:"Email boş bırakılamaz",
+  passwordWarning:"Şifre boş bırakılamaz",
+  helperSelectCountry:"Lütfen bir ülke seçiniz",
   welcome:"Ana Sayfaya Hoşgeldin",turkish:"Türkçe",english:"İngilizce",login:"Giriş",sample:"Örnek",lng:"Dil",home:"Ana sayfa"}
   //const translationsTr = { welocome: "Ev sayfasına hoşgeldin",turkish:"Türkiye"}
   i18n

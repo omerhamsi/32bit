@@ -1,12 +1,13 @@
 import React from 'react'
 import Dummy from "../images/dummy.png"
 import "../style/Footer.css"
+import { Box,Typography } from '@mui/material'
 function Footer() {
   return (
-    <div className='Footer'>
+    <Box className='Footer'>
         <img src={Dummy} alt="" />
-        <h3 style={{marginLeft:"20px"}}>Dummy Footer</h3>
-    </div>
+        <Typography variant="h4" component="h5" style={{marginLeft:"20px"}}>Dummy Footer</Typography>
+    </Box>
   )
 }
 export default Footer
